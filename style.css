@@ -1,11 +1,12 @@
 body{
   background-color:#200040;
+  color:white;
   
 }
 .entry{
   border: 4px solid #dfffc0;
   border-radius:16px;
-      
+  font-family:sans-serif;    
 }
 h3{
   font-family:"Courier New";
