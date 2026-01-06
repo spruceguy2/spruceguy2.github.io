@@ -109,7 +109,15 @@
         }
         markers[k].remove()
         ctrain.coords.splice(ind,1)
-        ctrain.line.setLatLngs(ctrain.coords)
+        clean()
+      }
+      function clean(){
+        ctrain.line.removeFrom(map)
+        ctrain.line.setLatLng([])
+        for(let j of ctrain.coords){
+          ctrain.line.addLatLng(new L.LatLng(j[0],j[1]))
+        }
+        ctrain.line.addTo(map)
       }
     </script>
   </body>
