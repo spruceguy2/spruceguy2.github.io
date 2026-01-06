@@ -18,3 +18,16 @@ h1{
   height:1000px;
   width:1000px;
 }
+.line{
+  height:32px;
+  width:32px;
+  border-radius:16px;
+}
+#cyan{
+  background:#00ffff;
+  color:#000000;
+}
+#yellow{
+  background:#ffff00;
+  color:#000000;
+}
