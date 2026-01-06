@@ -22,20 +22,29 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
       var stations = []
+      var markers = []
       class Station{
         constructor(name,lat,lng){
           this.name=name
           this.lat=lat
-          this.name=name
+          this.lng=lng
           //add later
         }
       }
       map.on('click', function(e){
         var k = prompt("What do you want your station to be called?")
         stations.push(new Station(k,e.latlng.lat,e.latlng.lng))
-        L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
+        markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         index++
-        stations[index].bindPopup("Station")
+        markers[index].bindPopup(k)
+        for(let i of stations){
+          if(Math.abs(e.latlng.lat - i.lat)<=0.01){
+            markers[stations.indexOf(i)].openPopup()
+          }
+          if(Math.abs(e.latlng.lng - i.lng)<=0.01){
+            markers[stations.indexOf(i)].openPopup()
+          }
+        }
       })
     </script>
   </body>
