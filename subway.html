@@ -54,7 +54,7 @@
         
         ctrain.markers.push(markers[index])
         ctrain.stations.push(stations[index])
-        for(let i of ctrain.stations){
+        for( i of ctrain.stations){
           ctrain.coords.push([i.lat, i.lng])
         }
         ctrain.line.setLatLngs(ctrain.coords)
