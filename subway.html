@@ -113,7 +113,7 @@
       }
       function clean(){
         ctrain.line.removeFrom(map)
-        ctrain.line.setLatLng([])
+        ctrain.line.setLatLngs([])
         for(let j of ctrain.coords){
           ctrain.line.addLatLng(new L.LatLng(j[0],j[1]))
         }
