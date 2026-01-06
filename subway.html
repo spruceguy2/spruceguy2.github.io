@@ -14,7 +14,7 @@
     <script>eruda.init()</script>
   </head>
   <body>
-    <h1>MetroBuild 0.3</h1>
+    <h1>MetroBuild 0.4</h1>
     By SpruceGuy
     <div id="map"></div>
     <button class="line" id="cyan">C</button>
@@ -25,6 +25,8 @@
       
       
       var index = -1
+      var cindex = -1
+      var yindex = -1
       var map = L.map('map').setView([40.75, -73.98], 13);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -51,7 +53,7 @@
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         
         index++
-        markers[index].bindPopup(k+`<button onclick="markers[${index}].remove() ctrain.line.setLatLngs(ctrain.coords)" class="remover">Remove station</button>`)
+        markers[index].bindPopup(k+`<button onclick="removeStation(${index})" class="remover">Remove station</button>`)
         for(let i of stations){
           if(Math.abs(e.latlng.lat - i.lat)<=0.01){
             markers[stations.indexOf(i)].openPopup()
@@ -69,14 +71,46 @@
           ctrain.coords.push([i.lat, i.lng])
         }
         ctrain.line.setLatLngs(ctrain.coords)
+        if(ctrain==c){
+          cindex++
+        }
+        if(ctrain==y){
+          yindex++
+        }
       })
       $("#cyan").click(function(){
+        switch(ctrain.name){
+          case "y":
+            y = ctrain
+          
+            
+        }
         ctrain = c
+        
         console.log(ctrain)
       })
       $("#yellow").click(function(){
+        switch(ctrain.name){
+          case "c":
+            c = ctrain
+          
+            
+        }
         ctrain = y
+        
       })
+      function removeStation(k){
+        var ind = 0
+        if(ctrain.name=="c"){
+          ind=cindex
+        }
+        if(ctrain.name=="y"){
+          ind=yindex
+        }
+        markers[k].remove()
+        ctrain.coords.splice(ind,1)
+        ctrain.line.setLatLngs(ctrain.coords)
+      }
     </script>
   </body>
 </html>
