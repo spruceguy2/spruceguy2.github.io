@@ -24,11 +24,15 @@
       var stations = []
       class Station{
         constructor(name,lat,lng){
+          this.name=name
+          this.lat=lat
+          this.name=name
           //add later
         }
       }
       map.on('click', function(e){
-        stations.push(new Station("Station",e.latlng.lat,e.latlng.lng))
+        var k = prompt("What do you want your station to be called?")
+        stations.push(new Station(k,e.latlng.lat,e.latlng.lng))
         L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
         index++
         stations[index].bindPopup("Station")
