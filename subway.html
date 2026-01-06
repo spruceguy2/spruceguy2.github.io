@@ -25,7 +25,7 @@
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
-      var y = {name:"y", dname:"y", color:"#ffff00", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: 'red'}).addTo(map)}
+      var y = {name:"y", dname:"y", color:"#ffff00", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#ffff00'}).addTo(map)}
       var ctrain = y
       
       var stations = []
@@ -57,6 +57,7 @@
         
         ctrain.markers.push(markers[index])
         ctrain.stations.push(stations[index])
+        ctrain.coords=[]
         for( i of ctrain.stations){
           ctrain.coords.push([i.lat, i.lng])
         }
