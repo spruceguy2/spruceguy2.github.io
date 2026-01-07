@@ -114,7 +114,7 @@
           ctrain.markers.splice(trainIndex, 1)
           ctrain.stations.splice(trainIndex, 1)
         }
-        markers[k].remove()
+        markers[k].remove() // bug here
         markers.splice(k, 1)
         stations.splice(k, 1)
         index--
@@ -143,7 +143,7 @@
         ctrain.coords.sort((a,b)=>Math.sqrt((a.lat-b.lat)**2 + (a.lng-b.lng)**2))
         for(let j of ctrain.coords){
           if(j!==37){
-            ctrain.line.addLatLng(new L.LatLng(j[0],j[1]))
+            ctrain.line.addLatLng(new L.LatLng(j[0],j[1])) // bug here
           }
         }
         ctrain.line.addTo(map)
