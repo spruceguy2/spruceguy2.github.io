@@ -52,8 +52,9 @@
         stations.push(new Station(k,e.latlng.lat,e.latlng.lng))
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         
-        index++
+        
         markers[index].bindPopup(k+`<button onclick="removeStation(${index})" class="remover">Remove station</button> <button onclick="addTrain('${ctrain.name}',${index})" class="adder">Add current train</button>`)
+        index++
         for(let i of stations){
           if(Math.abs(e.latlng.lat - i.lat)<=0.01){
             markers[stations.indexOf(i)].openPopup()
@@ -141,7 +142,11 @@
       function clean(){
         ctrain.line.removeFrom(map)
         ctrain.line.setLatLngs([])
-        ctrain.coords.sort((a,b)=>Math.sqrt((a.lat-b.lat)**2 + (a.lng-b.lng)**2))
+        ctrain.coords.sort((a,b)=>{
+          const distA = Math.sqrt((a.lat-ctrain.coords[0].lat)**2 + (a.lng-ctrain.coords[0].lng)**2)
+          const distB = Math.sqrt((b.lat-ctrain.coords[0].lat)**2 + (b.lng-ctrain.coords[0].lng)**2)
+          return distA - distB
+        })
         for(let j of ctrain.coords){
           if(j!==37){
             ctrain.line.addLatLng(new L.LatLng(j[0],j[1])) // bug here
