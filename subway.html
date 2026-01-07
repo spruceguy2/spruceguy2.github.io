@@ -115,6 +115,9 @@
           ctrain.stations.splice(trainIndex, 1)
         }
         markers[k].remove()
+        markers.splice(k, 1)
+        stations.splice(k, 1)
+        index--
         clean()
         
       }
