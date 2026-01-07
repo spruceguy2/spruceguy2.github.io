@@ -108,8 +108,9 @@
           ind=yindex
         }
         markers[k].remove()
-        ctrain.coords[ind] = 37
+        ctrain.coords[ind-1] = 37
         clean()
+        
       }
       function clean(){
         ctrain.line.removeFrom(map)
