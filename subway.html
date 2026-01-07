@@ -115,6 +115,13 @@
           ctrain.coords.splice(trainIndex, 1)
           ctrain.markers.splice(trainIndex, 1)
           ctrain.stations.splice(trainIndex, 1)
+          if(ctrain.name=="c"){
+          cindex--
+          }
+    
+    if(ctrain.name=="y"){
+      yindex--
+    }
         }
         markers[k].remove() // bug here
         markers.splice(k, 1)
