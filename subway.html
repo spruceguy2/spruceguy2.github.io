@@ -18,15 +18,18 @@
     By SpruceGuy
     <div id="map"></div>
     <button class="line" id="cyan">C</button>
+    <button class="line" id="magenta">M</button>
     <button class="line" id="yellow">Y</button>
+    <button class="line" id="black">K</button>
     <script>
       
       
       
-      var lcci, lcyi
+      var lcci, lcyi, lcmi, lcki
       var index = -1
       var cindex = -1
       var yindex = -1
+      var mindex, kindex = -1
       var map = L.map('map').setView([40.75, -73.98], 13);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -34,6 +37,8 @@
       }).addTo(map);
       var y = {name:"y", dname:"y", color:"#ffff00", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#ffff00', weight:6}).addTo(map)}
       var c = {name:"c", dname:"c", color:"#00ffff", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#00ffff', weight:6}).addTo(map)}
+      var m = {name:"m", dname:"m", color:"#ff00ff", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#ff00ff', weight:6}).addTo(map)}
+      var k = {name:"k", dname:"k", color:"#000000", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#000000', weight:6}).addTo(map)}
       var ctrain = y
       
       var stations = []
@@ -81,13 +86,29 @@
           yindex++
           ctrain.coords.splice(lcyi+1, 0, [e.latlng.lat, e.latlng.lng])
         }
+        if(ctrain==m){
+          markers[index].on('click', ()=>{lcmi = Number(index)})
+          mindex++
+          ctrain.coords.splice(lcmi+1, 0, [e.latlng.lat, e.latlng.lng])
+        }
+        if(ctrain==k){
+          markers[index].on('click', ()=>{lcki = Number(index)})
+          kindex++
+          ctrain.coords.splice(lcki+1, 0, [e.latlng.lat, e.latlng.lng])
+        }
         ctrain.line.setLatLngs(ctrain.coords)
       })
       $("#cyan").click(function(){
         switch(ctrain.name){
           case "y":
             y = ctrain
-          
+            break
+          case "m":
+            m = ctrain
+            break
+          case "k":
+            k = ctrain
+            break
             
         }
         ctrain = c
@@ -98,6 +119,13 @@
         switch(ctrain.name){
           case "c":
             c = ctrain
+            break
+          case "m":
+            m = ctrain
+            break
+          case "k":
+            k = ctrain
+            break
           
             
         }
