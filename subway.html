@@ -132,7 +132,41 @@
         ctrain = y
         
       })
-      function removeStation(k){
+      $("#magenta").click(function(){
+        switch(ctrain.name){
+          case "y":
+            y = ctrain
+            break
+          case "c":
+            c = ctrain
+            break
+          case "k":
+            k = ctrain
+            break
+            
+        }
+        ctrain = m
+        
+        console.log(ctrain)
+      })
+      $("#black").click(function(){
+        switch(ctrain.name){
+          case "c":
+            c = ctrain
+            break
+          case "m":
+            m = ctrain
+            break
+          case "y":
+            y = ctrain
+            break
+          
+            
+        }
+        ctrain = k
+        
+      })
+      function removeStation(K){
         var ind = 0
         if(ctrain.name=="c"){
           ind=cindex
@@ -140,7 +174,12 @@
         if(ctrain.name=="y"){
           ind=yindex
         }
-        
+        if(ctrain.name=="m"){
+          ind=mindex
+        }
+        if(ctrain.name=="k"){
+          ind=kindex
+        }
         
         var trainIndex = ctrain.markers.indexOf(markers[k])
         if(trainIndex !== -1){
@@ -148,16 +187,23 @@
           ctrain.markers.splice(trainIndex, 1)
           ctrain.stations.splice(trainIndex, 1)
           if(ctrain.name=="c"){
-          cindex--
+            cindex--
           }
     
-    if(ctrain.name=="y"){
-      yindex--
-    }
+          if(ctrain.name=="y"){
+            yindex--
+          }
+          if(ctrain.name=="m"){
+            mindex--
+          }
+    
+          if(ctrain.name=="k"){
+            kindex--
+          }
         }
-        markers[k].remove() // bug here
-        markers.splice(k, 1)
-        stations.splice(k, 1)
+        markers[K].remove() // bug here
+        markers.splice(K, 1)
+        stations.splice(K, 1)
         index--
         clean()
         
@@ -170,6 +216,12 @@
               break
             case "c":
               line = c
+              break
+            case "m":
+              line = m
+              break
+            case "k":
+              line = k
               break
           }
           var trainIndex = line.markers.indexOf(markers[dex])
