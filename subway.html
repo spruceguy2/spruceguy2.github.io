@@ -108,14 +108,16 @@
           ind=yindex
         }
         markers[k].remove()
-        ctrain.coords.splice(ind,1)
+        ctrain.coords[ind] = 37
         clean()
       }
       function clean(){
         ctrain.line.removeFrom(map)
         ctrain.line.setLatLngs([])
         for(let j of ctrain.coords){
-          ctrain.line.addLatLng(new L.LatLng(j[0],j[1]))
+          if(j!==37){
+            ctrain.line.addLatLng(new L.LatLng(j[0],j[1]))
+          }
         }
         ctrain.line.addTo(map)
       }
