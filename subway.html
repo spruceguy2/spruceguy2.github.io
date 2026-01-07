@@ -54,12 +54,12 @@
         
       }
       map.on('click', function(e){
-        var k = prompt("What do you want your station to be called? ")
-        stations.push(new Station(k,e.latlng.lat,e.latlng.lng))
+        var NAME = prompt("What do you want your station to be called? ")
+        stations.push(new Station(NAME,e.latlng.lat,e.latlng.lng))
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         
         index++
-        markers[index].bindPopup(k+`<button onclick="removeStation(${index})" class="remover">Remove station</button> <button onclick="addTrain('${ctrain.name}',${index})" class="adder">Add current train</button>`)
+        markers[index].bindPopup(NAME+`<button onclick="removeStation(${index})" class="remover">Remove station</button> <button onclick="addTrain('${ctrain.name}',${index})" class="adder">Add current train</button>`)
         
         for(let i of stations){
           if(Math.abs(e.latlng.lat - i.lat)<=0.01){
