@@ -74,12 +74,12 @@
         if(ctrain==c){
           markers[index].on('click', ()=>{lcci = Number(index)})
           cindex++
-          ctrain.coords.splice(lcci, 0, [e.latlng.lat, e.latlng.lng])
+          ctrain.coords.splice(lcci+1, 0, [e.latlng.lat, e.latlng.lng])
         }
         if(ctrain==y){
           markers[index].on('click', ()=>{lcyi = Number(index)})
           yindex++
-          ctrain.coords.splice(lcyi, 0, [e.latlng.lat, e.latlng.lng])
+          ctrain.coords.splice(lcyi+1, 0, [e.latlng.lat, e.latlng.lng])
         }
         ctrain.line.setLatLngs(ctrain.coords)
       })
