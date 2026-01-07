@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <link href="style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>MetroBuild</title>
+    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init()</script>
+  </head>
+  <body>
+    <h1>MetroBuild 0.4</h1>
+    By SpruceGuy
+    <div id="map"></div>
+    <button class="line" id="cyan">C</button>
+    <button class="line" id="yellow">Y</button>
+    <script>
+      
+      
+      
+      
+      var index = -1
+      var cindex = -1
+      var yindex = -1
+      var map = L.map('map').setView([40.75, -73.98], 13);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
+      var y = {name:"y", dname:"y", color:"#ffff00", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#ffff00', weight:6}).addTo(map)}
+      var c = {name:"c", dname:"c", color:"#00ffff", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#00ffff', weight:6}).addTo(map)}
+      var ctrain = y
+      
+      var stations = []
+      var markers = []
+      class Station{
+        constructor(name,lat,lng){
+          this.name=name
+          this.lat=lat
+          this.lng=lng
+          //add later
+        }
+        
+      }
+      map.on('click', function(e){
+        var k = prompt("What do you want your station to be called? ")
+        stations.push(new Station(k,e.latlng.lat,e.latlng.lng))
+        markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
+        
+        index++
+        markers[index].bindPopup(k+`<button onclick="removeStation(${index})" class="remover">Remove station</button> <button onclick="addTrain('${ctrain.name}',${index})" class="adder">Add current train</button>`)
+        for(let i of stations){
+          if(Math.abs(e.latlng.lat - i.lat)<=0.01){
+            markers[stations.indexOf(i)].openPopup()
+          }
+          if(Math.abs(e.latlng.lng - i.lng)<=0.01){
+            markers[stations.indexOf(i)].openPopup()
+          }
+        }
+        
+        
+        ctrain.markers.push(markers[index])
+        ctrain.stations.push(stations[index])
+        ctrain.coords=[]
+        for( i of ctrain.stations){
+          ctrain.coords.push([i.lat, i.lng])
+        }
+        ctrain.line.setLatLngs(ctrain.coords)
+        if(ctrain==c){
+          cindex++
+        }
+        if(ctrain==y){
+          yindex++
+        }
+      })
+      $("#cyan").click(function(){
+        switch(ctrain.name){
+          case "y":
+            y = ctrain
+          
+            
+        }
+        ctrain = c
+        
+        console.log(ctrain)
+      })
+      $("#yellow").click(function(){
+        switch(ctrain.name){
+          case "c":
+            c = ctrain
+          
+            
+        }
+        ctrain = y
+        
+      })
+      function removeStation(k){
+        var ind = 0
+        if(ctrain.name=="c"){
+          ind=cindex
+        }
+        if(ctrain.name=="y"){
+          ind=yindex
+        }
+        
+        ctrain.coords[ind-1] = 37
+        var trainIndex = ctrain.markers.indexOf(markers[k])
+        if(trainIndex !== -1){
+          ctrain.markers.splice(trainIndex, 1)
+          ctrain.stations.splice(trainIndex, 1)
+        }
+        markers[k].remove()
+        markers.splice(k, 1)
+        stations.splice(k, 1)
+        index--
+        clean()
+        
+      }
+      function addTrain(l,dex){
+          var line
+          switch(l){
+            case "y":
+              line = y
+              break
+            case "c":
+              line = c
+              break
+          }
+          var trainIndex = line.markers.indexOf(markers[dex])
+          ctrain.markers.push(markers[dex])
+          ctrain.stations.push(line.stations[trainIndex])
+          ctrain.coords.push([line.stations[trainIndex].lat, line.stations[trainIndex].lng])
+          clean()
+      }
+      function clean(){
+        ctrain.line.removeFrom(map)
+        ctrain.line.setLatLngs([])
+        for(let j of ctrain.coords){
+          if(j!==37){
+            ctrain.line.addLatLng(new L.LatLng(j[0],j[1]))
+          }
+        }
+        ctrain.line.addTo(map)
+      }
+      setInterval(function(){
+        clean()
+      },500)
+    </script>
+  </body>
+</html>
