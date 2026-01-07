@@ -108,9 +108,10 @@
           ind=yindex
         }
         
-        ctrain.coords[ind-1] = 37
+        
         var trainIndex = ctrain.markers.indexOf(markers[k])
         if(trainIndex !== -1){
+          ctrain.coords.splice(trainIndex, 1)
           ctrain.markers.splice(trainIndex, 1)
           ctrain.stations.splice(trainIndex, 1)
         }
