@@ -52,9 +52,9 @@
         stations.push(new Station(k,e.latlng.lat,e.latlng.lng))
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         
-        
-        markers[index].bindPopup(k+`<button onclick="removeStation(${index})" class="remover">Remove station</button> <button onclick="addTrain('${ctrain.name}',${index})" class="adder">Add current train</button>`)
         index++
+        markers[index].bindPopup(k+`<button onclick="removeStation(${index})" class="remover">Remove station</button> <button onclick="addTrain('${ctrain.name}',${index})" class="adder">Add current train</button>`)
+        
         for(let i of stations){
           if(Math.abs(e.latlng.lat - i.lat)<=0.01){
             markers[stations.indexOf(i)].openPopup()
