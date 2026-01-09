@@ -66,8 +66,10 @@
         }
         
       }
-      function f(x){
-        return 0
+      function f(lat,lng){
+        var x,y
+        x = 0.5 + (lng/360)
+        y = 0.5 - (Math.log(Math.tan(lat) + 1/Math.cos(lat)))/(2*Math.PI)
       }
       map.on('click', function(e){
         
