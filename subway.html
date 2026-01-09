@@ -14,7 +14,7 @@
     <script>eruda.init()</script>
   </head>
   <body>
-    <h1>MetroBuild 0.5</h1>
+    <h1>MetroBuild 0.6</h1>
     By SpruceGuy
     <div id="map"></div>
     <button class="line" id="cyan">C</button>
@@ -267,7 +267,11 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
       }
       setInterval(function(){
         clean()
-        cash += Math.floor(4*(stations.length+Math.random()-0.5))/12
+        var inc = Math.floor(4*(stations.length+Math.random()-0.5))/12
+        if(-inc > cash){
+          cash = 0
+        }
+        cash += Math.round(inc*100)/100
         $("#cash").text(cash)
       },500)
     </script>
