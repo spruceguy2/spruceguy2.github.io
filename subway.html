@@ -267,11 +267,12 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
       }
       setInterval(function(){
         clean()
-        var inc = Math.floor(4*(stations.length+Math.random()-0.5))/12
+        var inc = Math.floor(4*(stations.length+Math.random()-0.5))/16
         if(-inc > cash){
           cash = 0
+          return
         }
-        cash += Math.round(inc*100)/100
+        cash += inc
         $("#cash").text(cash)
       },500)
     </script>
