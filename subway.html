@@ -55,6 +55,8 @@
       var ctrain = y
       
       var stations = []
+      var hds = []
+      var hdm = []
       var markers = []
       class Station{
         constructor(name,lat,lng){
@@ -66,6 +68,17 @@
         
       }
       map.on('click', function(e){
+        
+        var NAME = prompt("What do you want your station to be called? (say 'hotdog' to make a hot dog stand)")
+        if(NAME=="hotdog"){
+          if(mode==1 && cash<10){
+            alert("You need ten bucks.")
+            return
+          }else if(mode==1){
+            cash -= 10
+            $("#cash").text(cash)
+          }
+        }
         if(mode==1 && cash<10){
           alert("You need ten bucks.")
           return
@@ -73,7 +86,6 @@
           cash -= 10
           $("#cash").text(cash)
         }
-        var NAME = prompt("What do you want your station to be called? ")
         stations.push(new Station(NAME,e.latlng.lat,e.latlng.lng))
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         
