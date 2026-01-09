@@ -23,6 +23,7 @@
     <button class="line" id="black">K</button>
     <a id="l" href="?mode=limited">Limited mode</a>
     You have $<span id="cash">20</span>.
+    
     <script>
       
       
@@ -266,6 +267,8 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
       }
       setInterval(function(){
         clean()
+        cash += Math.floor(4*(stations.length+Math.random()-0.5))/12
+        $("#cash").text(cash)
       },500)
     </script>
   </body>
