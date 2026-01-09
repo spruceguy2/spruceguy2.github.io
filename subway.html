@@ -21,11 +21,18 @@
     <button class="line" id="magenta">M</button>
     <button class="line" id="yellow">Y</button>
     <button class="line" id="black">K</button>
+    <a href="/?mode=limited">Limited mode</a>
+    You have $<span id="cash">20</span>.
     <script>
       
-      
-      
+      location.href = "/?mode=sandbox"
+      var par = new URLSearchParams(location.search)
+      var mode = 0
+      if(par.get("mode")=="limited"){
+        mode = 1
+      }
       var lcci, lcyi, lcmi, lcki
+      var cash = 20
       var index = -1
       var cindex = -1
       var yindex = -1
@@ -54,6 +61,13 @@
         
       }
       map.on('click', function(e){
+        if(mode==1 && cash<10){
+          alert("You need ten bucks.")
+          return
+        }else if(mode==1){
+          cash -= 10
+          $("#cash").text(cash)
+        }
         var NAME = prompt("What do you want your station to be called? ")
         stations.push(new Station(NAME,e.latlng.lat,e.latlng.lng))
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
@@ -168,6 +182,10 @@
         
       })
       function removeStation(K){
+        if(mode==1){
+          cash += 9
+          $("#cash").text(cash)
+        }
         var ind = 0
         if(ctrain.name=="c"){
           ind=cindex
