@@ -296,7 +296,7 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
       }
       setInterval(function(){
         clean()
-        var inc = Math.floor(4*(stations.length+Math.random()-0.5))/16 + hdm.length * (Math.random()+0.5)
+        var inc = Math.floor(4*(stations.length+Math.random()-0.5) + 4*((hdm.length * (Math.random()+0.5))/4))/16 
         if(-inc > cash){
           cash = 0
           return
