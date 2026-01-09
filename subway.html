@@ -21,15 +21,19 @@
     <button class="line" id="magenta">M</button>
     <button class="line" id="yellow">Y</button>
     <button class="line" id="black">K</button>
-    <a href="/?mode=limited">Limited mode</a>
+    <a id="l" href="?mode=limited">Limited mode</a>
     You have $<span id="cash">20</span>.
     <script>
       
-      location.href = "/?mode=sandbox"
+      
       var par = new URLSearchParams(location.search)
       var mode = 0
       if(par.get("mode")=="limited"){
         mode = 1
+        $("#l").text("Sandbox mode")
+        $("#l").attr("href", "?mode=sandbox")
+      }else{
+        mode = 0
       }
       var lcci, lcyi, lcmi, lcki
       var cash = 20
