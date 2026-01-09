@@ -14,18 +14,30 @@
     <script>eruda.init()</script>
   </head>
   <body>
-    <h1>MetroBuild 0.5</h1>
+    <h1>MetroBuild 0.6</h1>
     By SpruceGuy
     <div id="map"></div>
     <button class="line" id="cyan">C</button>
     <button class="line" id="magenta">M</button>
     <button class="line" id="yellow">Y</button>
     <button class="line" id="black">K</button>
+    <a id="l" href="?mode=limited">Limited mode</a>
+    You have $<span id="cash">20</span>.
+    
     <script>
       
-      
-      
+     
+      var par = new URLSearchParams(location.search)
+      var mode = 0
+      if(par.get("mode")=="limited"){
+        mode = 1
+        $("#l").text("Sandbox mode")
+        $("#l").attr("href", "?mode=sandbox")
+      }else{
+        mode = 0
+      }
       var lcci, lcyi, lcmi, lcki
+      var cash = 20
       var index = -1
       var cindex = -1
       var yindex = -1
@@ -43,6 +55,7 @@
       var ctrain = y
       
       var stations = []
+      var hdm = []
       var markers = []
       class Station{
         constructor(name,lat,lng){
@@ -53,8 +66,43 @@
         }
         
       }
+      function f(lat,lng){
+        var x,y
+        x = 0.5 + (lng/360)
+        y = 0.5 - (Math.log(Math.tan(lat) + 1/Math.cos(lat)))/(2*Math.PI)
+        return [x,y]
+      }
       map.on('click', function(e){
-        var NAME = prompt("What do you want your station to be called? ")
+        
+        var NAME = prompt("What do you want your station to be called? (say 'hotdog' to make a hot dog stand)")
+        if(NAME=="hotdog"){
+          if(mode==1 && cash<7.5){
+            alert("You need seven bucks and 4 bits.")
+            return
+          }else if(mode==1){
+            cash -= 7.5
+            $("#cash").text(cash)
+          }
+         var icon = L.icon({
+            iconUrl: 'hotdog.png',
+            shadowUrl: 'hotdog.png',
+
+            iconSize:     [38, 38], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [8,8], // point of the icon which will correspond to marker's location
+            shadowAnchor: [0, 0],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+          });   
+        hdm.push(L.marker([e.latlng.lat, e.latlng.lng], {icon:icon}).addTo(map))
+          return
+        }
+        if(mode==1 && cash<10){
+          alert("You need ten bucks.")
+          return
+        }else if(mode==1){
+          cash -= 10
+          $("#cash").text(cash)
+        }
         stations.push(new Station(NAME,e.latlng.lat,e.latlng.lng))
         markers.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
         
@@ -168,6 +216,10 @@
         
       })
       function removeStation(K){
+        if(mode==1){
+          cash += 9
+          $("#cash").text(cash)
+        }
         var ind = 0
         if(ctrain.name=="c"){
           ind=cindex
@@ -244,6 +296,13 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
       }
       setInterval(function(){
         clean()
+        var inc = Math.floor(4*(stations.length+Math.random()-0.5) + 4*((hdm.length * (Math.random()+0.5))/4))/16 
+        if(-inc > cash){
+          cash = 0
+          return
+        }
+        cash += inc
+        $("#cash").text(cash)
       },500)
     </script>
   </body>
