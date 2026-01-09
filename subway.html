@@ -70,6 +70,7 @@
         var x,y
         x = 0.5 + (lng/360)
         y = 0.5 - (Math.log(Math.tan(lat) + 1/Math.cos(lat)))/(2*Math.PI)
+        return [x,y]
       }
       map.on('click', function(e){
         
@@ -88,11 +89,11 @@
 
             iconSize:     [38, 38], // size of the icon
             shadowSize:   [0, 0], // size of the shadow
-            iconAnchor:   [r, r], // point of the icon which will correspond to marker's location
+            iconAnchor:   f(e.latlng.lat, e.latlng.lng), // point of the icon which will correspond to marker's location
             shadowAnchor: [0, 0],  // the same for the shadow
             popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
           });   
-        hdm.push(L.marker([e.latlng.lat, e.latlng.lng]).addTo(map))
+        hdm.push(L.marker([e.latlng.lat, e.latlng.lng], icon).addTo(map))
         }
         if(mode==1 && cash<10){
           alert("You need ten bucks.")
@@ -294,7 +295,7 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
       }
       setInterval(function(){
         clean()
-        var inc = Math.floor(4*(stations.length+Math.random()-0.5))/16
+        var inc = Math.floor(4*(stations.length+Math.random()-0.5))/16 + hdm * (Math.random()+0.5)
         if(-inc > cash){
           cash = 0
           return
