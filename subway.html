@@ -291,12 +291,15 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
         ctrain.line.addTo(map)
       }
       function levelHS(dex){
-        if(cash<15){
-          alert("You need fifteen bucks.")
-          return
+        if(mode==1){
+          if(cash<15){
+            alert("You need fifteen bucks.")
+            return
+          }
+          cash -= 15
+          $("#cash").text(cash)
         }
-        cash -= 15
-        $("#cash").text(cash)
+        
         addLevs++
         if(hdl[dex]==1){
           hdm[dex].setIcon(L.icon({
