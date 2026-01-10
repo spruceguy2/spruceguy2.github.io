@@ -27,7 +27,7 @@
     
     <a id="l" href="?mode=limited">Limited mode</a>
     You have $<span id="cash">20</span>.
-    
+    <button id="pats">Place a station at the start.</button>
     <script>
       var addLevs = 0
       var hdind = -1
@@ -133,54 +133,32 @@
         
         ctrain.markers.push(markers[index])
         ctrain.stations.push(stations[index])
-        
-        
-        
-        
-        if(ctrain==c){
-          markers[index].on('click', ()=>{lcci = Number(index)})
-          cindex++
-          ctrain.coords.splice(lcci+1, 0, [e.latlng.lat, e.latlng.lng])
+        var linds = {
+          c:lcci,
+          y:lcyi,
+          m:lcmi,
+          k:lcki,
+          a:lcai,
+          c_blue:lcci2,
+          e:lcei,
         }
-        if(ctrain==y){
-          markers[index].on('click', ()=>{lcyi = Number(index)})
-          yindex++
-          ctrain.coords.splice(lcyi+1, 0, [e.latlng.lat, e.latlng.lng])
+        var inds = {
+          c:cindex,
+          y:yindex,
+          m:mindex,
+          k:kindex,
+          a:aindex,
+          c_blue:cindex2,
+          e:eindex,
         }
-        if(ctrain==m){
-          markers[index].on('click', ()=>{lcmi = Number(index)})
-          mindex++
-          ctrain.coords.splice(lcmi+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        if(ctrain==k){
-          markers[index].on('click', ()=>{lcki = Number(index)})
-          kindex++
-          ctrain.coords.splice(lcki+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        if(ctrain==a){
-          markers[index].on('click', ()=>{lcai = Number(index)})
-          aindex++
-          ctrain.coords.splice(lcai+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        if(ctrain==c_blue){
-          markers[index].on('click', ()=>{lcci2 = Number(index)})
-          cindex2++
-          ctrain.coords.splice(lcci2+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        if(ctrain==e){
-          markers[index].on('click', ()=>{lcei = Number(index)})
-          eindex++
-          ctrain.coords.splice(lcei+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        ctrain.line.setLatLngs(ctrain.coords)
-      })
+         markers[index].on('click', ()=>{linds[ctrain.name] = Number(index)})
+          inds[ctrain.name]++
+          ctrain.coords.splice(linds[ctrain.name], 0, [e.latlng.lat, e.latlng.lng])
+      }
       const trains = { c: c, y: y, m: m, k: k, a:a, c_blue:c_blue, e:e, };
 
 function switchTrain(newTrainKey) {
-  
   trains[ctrain.name] = ctrain;
-  
-
   ctrain = trains[newTrainKey];
   console.log(ctrain);
 }
@@ -197,49 +175,15 @@ $("#black").click(() => switchTrain('k'));
           cash += 9
           $("#cash").text(cash)
         }
-        var ind = 0
-        if(ctrain.name=="c"){
-          ind=cindex
-        }
-        if(ctrain.name=="y"){
-          ind=yindex
-        }
-        if(ctrain.name=="m"){
-          ind=mindex
-        }
-        if(ctrain.name=="k"){
-          ind=kindex
-        }
+        var ind = inds[ctrain.name]
+        
         
 var trainIndex = ctrain.markers.indexOf(markers[K])
         if(trainIndex !== -1){
           ctrain.coords.splice(trainIndex, 1)
           ctrain.markers.splice(trainIndex, 1)
           ctrain.stations.splice(trainIndex, 1)
-          if(ctrain.name=="c"){
-            cindex--
-          }
-    
-          if(ctrain.name=="y"){
-            yindex--
-          }
-          if(ctrain.name=="m"){
-            mindex--
-          }
-    
-          if(ctrain.name=="k"){
-            kindex--
-          }
-          if(ctrain.name=="a"){
-            aindex--
-          }
-          if(ctrain.name=="c_blue"){
-            cindex2--
-          }
-    
-          if(ctrain.name=="e"){
-            eindex--
-          }
+         inds[ctrain]--
         }
         markers[K].remove() // bug here
         markers.splice(K, 1)
