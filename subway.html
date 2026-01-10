@@ -21,12 +21,17 @@
     <button class="line" id="magenta">M</button>
     <button class="line" id="yellow">Y</button>
     <button class="line" id="black">K</button>
+    <button class="line av8" id="a">A</button>
+    <button class="line av8" id="c">C</button>
+    <button class="line av8" id="e">E</button>
+    
     <a id="l" href="?mode=limited">Limited mode</a>
     You have $<span id="cash">20</span>.
-    
+    <button id="pats">Toggle placing stations at the start.</button>
     <script>
-      
-     
+      var pats = false
+      var addLevs = 0
+      var hdind = -1
       var par = new URLSearchParams(location.search)
       var mode = 0
       if(par.get("mode")=="limited"){
@@ -36,13 +41,14 @@
       }else{
         mode = 0
       }
-      var lcci, lcyi, lcmi, lcki
+      var lcci, lcyi, lcmi, lcki, lcai, lcci2, lcei
       var cash = 20
       var index = -1
       var cindex = -1
       var yindex = -1
       var mindex = -1
       var kindex = -1
+      var aindex = -1, cindex2 = -1, eindex = -1
       var map = L.map('map').setView([40.75, -73.98], 13);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -52,11 +58,33 @@
       var c = {name:"c", dname:"c", color:"#00ffff", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#00ffff', weight:6}).addTo(map)}
       var m = {name:"m", dname:"m", color:"#ff00ff", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#ff00ff', weight:6}).addTo(map)}
       var k = {name:"k", dname:"k", color:"#000000", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#000000', weight:6}).addTo(map)}
+      var a = {name:"a", dname:"a", color:"#0039a6", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#0039a6', weight:6}).addTo(map)}
+      var c_blue = {name:"c_blue", dname:"c", color:"#0039a6", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#0039a6', weight:6}).addTo(map)}
+      var e = {name:"e", dname:"e", color:"#0039a6", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#0039a6', weight:6}).addTo(map)}
       var ctrain = y
       
       var stations = []
       var hdm = []
+      var hdl = []
       var markers = []
+      var linds = {
+          c:lcci,
+          y:lcyi,
+          m:lcmi,
+          k:lcki,
+          a:lcai,
+          c_blue:lcci2,
+          e:lcei,
+        }
+        var inds = {
+          c:cindex,
+          y:yindex,
+          m:mindex,
+          k:kindex,
+          a:aindex,
+          c_blue:cindex2,
+          e:eindex,
+        }
       class Station{
         constructor(name,lat,lng){
           this.name=name
@@ -76,6 +104,7 @@
         
         var NAME = prompt("What do you want your station to be called? (say 'hotdog' to make a hot dog stand)")
         if(NAME=="hotdog"){
+          hdind++
           if(mode==1 && cash<7.5){
             alert("You need seven bucks and 4 bits.")
             return
@@ -94,6 +123,8 @@
             popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
           });   
         hdm.push(L.marker([e.latlng.lat, e.latlng.lng], {icon:icon}).addTo(map))
+        hdm[hdind].bindPopup(`Hot dog stand. <button onclick='levelHS(${hdind})'>Level up</button>`)
+        hdl.push(1)
           return
         }
         if(mode==1 && cash<10){
@@ -122,137 +153,44 @@
         ctrain.markers.push(markers[index])
         ctrain.stations.push(stations[index])
         
-        
-        
-        
-        if(ctrain==c){
-          markers[index].on('click', ()=>{lcci = Number(index)})
-          cindex++
-          ctrain.coords.splice(lcci+1, 0, [e.latlng.lat, e.latlng.lng])
+         markers[index].on('click', ()=>{linds[ctrain.name] = Number(index)})
+          inds[ctrain.name]++
+        if(pats){
+          ctrain.coords.unshift([e.latlng.lat, e.latlng.lng])
+        }else{
+          ctrain.coords.splice(linds[ctrain.name], 0, [e.latlng.lat, e.latlng.lng])
         }
-        if(ctrain==y){
-          markers[index].on('click', ()=>{lcyi = Number(index)})
-          yindex++
-          ctrain.coords.splice(lcyi+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        if(ctrain==m){
-          markers[index].on('click', ()=>{lcmi = Number(index)})
-          mindex++
-          ctrain.coords.splice(lcmi+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        if(ctrain==k){
-          markers[index].on('click', ()=>{lcki = Number(index)})
-          kindex++
-          ctrain.coords.splice(lcki+1, 0, [e.latlng.lat, e.latlng.lng])
-        }
-        ctrain.line.setLatLngs(ctrain.coords)
-      })
-      $("#cyan").click(function(){
-        switch(ctrain.name){
-          case "y":
-            y = ctrain
-            break
-          case "m":
-            m = ctrain
-            break
-          case "k":
-            k = ctrain
-            break
-            
-        }
-        ctrain = c
-        
-        console.log(ctrain)
-      })
-      $("#yellow").click(function(){
-        switch(ctrain.name){
-          case "c":
-            c = ctrain
-            break
-          case "m":
-            m = ctrain
-            break
-          case "k":
-            k = ctrain
-            break
           
-            
-        }
-        ctrain = y
-        
-      })
-      $("#magenta").click(function(){
-        switch(ctrain.name){
-          case "y":
-            y = ctrain
-            break
-          case "c":
-            c = ctrain
-            break
-          case "k":
-            k = ctrain
-            break
-            
-        }
-        ctrain = m
-        
-        console.log(ctrain)
-      })
-      $("#black").click(function(){
-        switch(ctrain.name){
-          case "c":
-            c = ctrain
-            break
-          case "m":
-            m = ctrain
-            break
-          case "y":
-            y = ctrain
-            break
-          
-            
-        }
-        ctrain = k
-        
-      })
+      }
+      const trains = { c: c, y: y, m: m, k: k, a:a, c_blue:c_blue, e:e, };
+
+function switchTrain(newTrainKey) {
+  trains[ctrain.name] = ctrain;
+  ctrain = trains[newTrainKey];
+  console.log(ctrain);
+}
+
+$("#cyan").click(() => switchTrain('c'));
+$("#yellow").click(() => switchTrain('y'));
+$("#magenta").click(() => switchTrain('m'));
+$("#black").click(() => switchTrain('k'));
+      $("#a").click(() => switchTrain('a'));
+      $("#c").click(() => switchTrain('c_blue'));
+      $("#e").click(() => switchTrain('e'));
       function removeStation(K){
         if(mode==1){
           cash += 9
           $("#cash").text(cash)
         }
-        var ind = 0
-        if(ctrain.name=="c"){
-          ind=cindex
-        }
-        if(ctrain.name=="y"){
-          ind=yindex
-        }
-        if(ctrain.name=="m"){
-          ind=mindex
-        }
-        if(ctrain.name=="k"){
-          ind=kindex
-        }
+        var ind = inds[ctrain.name]
+        
         
 var trainIndex = ctrain.markers.indexOf(markers[K])
         if(trainIndex !== -1){
           ctrain.coords.splice(trainIndex, 1)
           ctrain.markers.splice(trainIndex, 1)
           ctrain.stations.splice(trainIndex, 1)
-          if(ctrain.name=="c"){
-            cindex--
-          }
-    
-          if(ctrain.name=="y"){
-            yindex--
-          }
-          if(ctrain.name=="m"){
-            mindex--
-          }
-    
-          if(ctrain.name=="k"){
-            kindex--
-          }
+         inds[ctrain.name]--
         }
         markers[K].remove() // bug here
         markers.splice(K, 1)
@@ -276,6 +214,15 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
             case "k":
               line = k
               break
+            case "a":
+              line = a
+              break
+            case "c_blue":
+              line = c_blue
+              break
+            case "e":
+              line = e
+              break
           }
           var trainIndex = line.markers.indexOf(markers[dex])
           ctrain.markers.push(markers[dex])
@@ -294,9 +241,38 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
         }
         ctrain.line.addTo(map)
       }
+      function levelHS(dex){
+        if(mode==1){
+          if(cash<15){
+            alert("You need fifteen bucks.")
+            return
+          }
+          cash -= 15
+          $("#cash").text(cash)
+        }
+        
+        addLevs++
+        if(hdl[dex]==1){
+          hdm[dex].setIcon(L.icon({
+            iconUrl: 'hdog2.png',
+            shadowUrl: 'hdog2.png',
+
+            iconSize:     [38, 38], // size of the icon
+            shadowSize:   [0, 0], // size of the shadow
+            iconAnchor:   [16,16], // point of the icon which will correspond to marker's location
+            shadowAnchor: [0, 0],  // the same for the shadow
+            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+          }))
+          
+        }else{}
+        hdl[dex]++
+        
+        
+      }
+      $("#pats").click(function(){pats=!pats})
       setInterval(function(){
         clean()
-        var inc = Math.floor(4*(stations.length+Math.random()-0.5) + 4*((hdm.length * (Math.random()+0.5))/4))/16 
+        var inc = Math.floor(4*(stations.length+Math.random()-0.5) + 4*(((hdm.length+addLevs)* (Math.random()+0.5))/4))/16 
         if(-inc > cash){
           cash = 0
           return
