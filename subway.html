@@ -25,7 +25,7 @@
     You have $<span id="cash">20</span>.
     
     <script>
-      
+      var addLevs = 0
       var hdind = -1
       var par = new URLSearchParams(location.search)
       var mode = 0
@@ -298,11 +298,13 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
         }
         ctrain.line.addTo(map)
       }
-      function levelUp(dex){
+      function levelHS(dex){
         if(cash<15){
           alert("You need fifteen bucks.")
           return
         }
+        cash -= 15
+        $("#cash").text(cash)
         addLevs++
         if(hdl[dex]==1){
           hdm[dex].setIcon(L.icon({
