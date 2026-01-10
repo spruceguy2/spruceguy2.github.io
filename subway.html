@@ -21,6 +21,10 @@
     <button class="line" id="magenta">M</button>
     <button class="line" id="yellow">Y</button>
     <button class="line" id="black">K</button>
+    <button class="line" class="av8" id="a">A</button>
+    <button class="line" class="av8" id="c">C</button>
+    <button class="line" class="av8" id="e">E</button>
+    
     <a id="l" href="?mode=limited">Limited mode</a>
     You have $<span id="cash">20</span>.
     
@@ -36,13 +40,14 @@
       }else{
         mode = 0
       }
-      var lcci, lcyi, lcmi, lcki
+      var lcci, lcyi, lcmi, lcki, lcai, lcci2, lcei
       var cash = 20
       var index = -1
       var cindex = -1
       var yindex = -1
       var mindex = -1
       var kindex = -1
+      var aindex = -1, cindex2 = -1, eindex = -1
       var map = L.map('map').setView([40.75, -73.98], 13);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -52,6 +57,9 @@
       var c = {name:"c", dname:"c", color:"#00ffff", tcolor:"#000000", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#00ffff', weight:6}).addTo(map)}
       var m = {name:"m", dname:"m", color:"#ff00ff", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#ff00ff', weight:6}).addTo(map)}
       var k = {name:"k", dname:"k", color:"#000000", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#000000', weight:6}).addTo(map)}
+      var a = {name:"a", dname:"a", color:"#0039a6", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#0039a6', weight:6}).addTo(map)}
+      var c_blue = {name:"c_blue", dname:"c", color:"#0039a6", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#0039a6', weight:6}).addTo(map)}
+      var e = {name:"e", dname:"e", color:"#0039a6", tcolor:"#ffffff", stations:[], markers:[], coords:[], line:L.polyline([], {color: '#0039a6', weight:6}).addTo(map)}
       var ctrain = y
       
       var stations = []
@@ -149,76 +157,41 @@
           kindex++
           ctrain.coords.splice(lcki+1, 0, [e.latlng.lat, e.latlng.lng])
         }
+        if(ctrain==a){
+          markers[index].on('click', ()=>{lcai = Number(index)})
+          aindex++
+          ctrain.coords.splice(lcai+1, 0, [e.latlng.lat, e.latlng.lng])
+        }
+        if(ctrain==c_blue){
+          markers[index].on('click', ()=>{lcci2 = Number(index)})
+          cindex2++
+          ctrain.coords.splice(lcci2+1, 0, [e.latlng.lat, e.latlng.lng])
+        }
+        if(ctrain==e){
+          markers[index].on('click', ()=>{lcei = Number(index)})
+          eindex++
+          ctrain.coords.splice(lcei+1, 0, [e.latlng.lat, e.latlng.lng])
+        }
         ctrain.line.setLatLngs(ctrain.coords)
       })
-      $("#cyan").click(function(){
-        switch(ctrain.name){
-          case "y":
-            y = ctrain
-            break
-          case "m":
-            m = ctrain
-            break
-          case "k":
-            k = ctrain
-            break
-            
-        }
-        ctrain = c
-        
-        console.log(ctrain)
-      })
-      $("#yellow").click(function(){
-        switch(ctrain.name){
-          case "c":
-            c = ctrain
-            break
-          case "m":
-            m = ctrain
-            break
-          case "k":
-            k = ctrain
-            break
-          
-            
-        }
-        ctrain = y
-        
-      })
-      $("#magenta").click(function(){
-        switch(ctrain.name){
-          case "y":
-            y = ctrain
-            break
-          case "c":
-            c = ctrain
-            break
-          case "k":
-            k = ctrain
-            break
-            
-        }
-        ctrain = m
-        
-        console.log(ctrain)
-      })
-      $("#black").click(function(){
-        switch(ctrain.name){
-          case "c":
-            c = ctrain
-            break
-          case "m":
-            m = ctrain
-            break
-          case "y":
-            y = ctrain
-            break
-          
-            
-        }
-        ctrain = k
-        
-      })
+      const trains = { c: c, y: y, m: m, k: k, a:a, c_blue:c_blue, e:e, };
+
+function switchTrain(newTrainKey) {
+  
+  trains[ctrain.name] = ctrain;
+  
+
+  ctrain = trains[newTrainKey];
+  console.log(ctrain);
+}
+
+$("#cyan").click(() => switchTrain('c'));
+$("#yellow").click(() => switchTrain('y'));
+$("#magenta").click(() => switchTrain('m'));
+$("#black").click(() => switchTrain('k'));
+      $("#a").click(() => switchTrain('a'));
+      $("#c").click(() => switchTrain('c_blue'));
+      $("#e").click(() => switchTrain('e'));
       function removeStation(K){
         if(mode==1){
           cash += 9
@@ -257,6 +230,16 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
           if(ctrain.name=="k"){
             kindex--
           }
+          if(ctrain.name=="a"){
+            aindex--
+          }
+          if(ctrain.name=="c_blue"){
+            cindex2--
+          }
+    
+          if(ctrain.name=="e"){
+            eindex--
+          }
         }
         markers[K].remove() // bug here
         markers.splice(K, 1)
@@ -279,6 +262,15 @@ var trainIndex = ctrain.markers.indexOf(markers[K])
               break
             case "k":
               line = k
+              break
+            case "a":
+              line = a
+              break
+            case "c_blue":
+              line = c_blue
+              break
+            case "e":
+              line = e
               break
           }
           var trainIndex = line.markers.indexOf(markers[dex])
